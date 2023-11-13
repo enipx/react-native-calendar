@@ -5,7 +5,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <WeekCalendar />
-      <Calendar hideOtherMonthDays />
+      <Calendar />
     </View>
   );
 }

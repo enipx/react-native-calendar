@@ -7,6 +7,7 @@ import type {
 } from './calendar.type';
 import { Button, Flex, Text, View } from '../themed';
 import { useCalendar } from '../hooks/use-calender';
+import GestureRecognizer from '../themed/gesture';
 
 export const WeekDaysText = (props: WeekDaysTextProps) => {
   const { font, days, ...rest } = props;
@@ -86,44 +87,49 @@ export const Calendar = (props: CalendarProps) => {
         onPreviousPress={gotoPreviousMonth}
       />
 
-      <WeekDaysText mb={12} days={AllWeekDays.short} {...props} />
+      <GestureRecognizer
+        onSwipeLeft={gotoNextMonth}
+        onSwipeRight={gotoPreviousMonth}
+      >
+        <WeekDaysText mb={12} days={AllWeekDays.short} {...props} />
 
-      <Flex width="100%" flexWrap="wrap">
-        {allSelectedMonthDays.map((day, index) => {
-          let { color, bg } = getDayStyle(day);
+        <Flex width="100%" flexWrap="wrap">
+          {allSelectedMonthDays.map((day, index) => {
+            let { color, bg } = getDayStyle(day);
 
-          const hide = !isDayVisible(day);
+            const hide = !isDayVisible(day);
 
-          return (
-            <View
-              width={getDeviceLayout(AllWeekDays.short.length).width}
-              key={index}
-              height={size}
-              center
-              opacity={hide ? 0 : 1}
-            >
-              <Button
-                borderRadius={size}
-                size={size}
-                bg={bg}
-                onPress={() => {
-                  if (hide) return;
-                  updateSelectedDay(day);
-                }}
+            return (
+              <View
+                width={getDeviceLayout(AllWeekDays.short.length).width}
+                key={index}
+                height={size}
+                center
+                opacity={hide ? 0 : 1}
               >
-                <Text
-                  weight={
-                    isDayToday(day) || isDaySelected(day) ? '500' : undefined
-                  }
-                  color={color}
+                <Button
+                  borderRadius={size}
+                  size={size}
+                  bg={bg}
+                  onPress={() => {
+                    if (hide) return;
+                    updateSelectedDay(day);
+                  }}
                 >
-                  {day.getDate()}
-                </Text>
-              </Button>
-            </View>
-          );
-        })}
-      </Flex>
+                  <Text
+                    weight={
+                      isDayToday(day) || isDaySelected(day) ? '500' : undefined
+                    }
+                    color={color}
+                  >
+                    {day.getDate()}
+                  </Text>
+                </Button>
+              </View>
+            );
+          })}
+        </Flex>
+      </GestureRecognizer>
     </View>
   );
 };

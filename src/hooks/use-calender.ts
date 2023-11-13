@@ -12,7 +12,7 @@ import {
   isSameDay,
   isSameMonth,
 } from 'date-fns';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { CalendarProps } from '../calendar/calendar.type';
 
 export const useCalendar = (options: CalendarProps) => {
@@ -34,24 +34,28 @@ export const useCalendar = (options: CalendarProps) => {
   const firstDayOfSelectedMonth = parse(selectedMonth, 'MMM-yyyy', new Date());
 
   // all days of the selected month
-  const allSelectedMonthDays = eachDayOfInterval({
-    start: startOfWeek(firstDayOfSelectedMonth),
-    end: endOfWeek(endOfMonth(firstDayOfSelectedMonth)),
-  });
+  const allSelectedMonthDays = useMemo(() => {
+    return eachDayOfInterval({
+      start: startOfWeek(firstDayOfSelectedMonth),
+      end: endOfWeek(endOfMonth(firstDayOfSelectedMonth)),
+    });
+  }, [firstDayOfSelectedMonth]);
 
   // go to next month
-  const gotoNextMonth = () => {
+  const gotoNextMonth = useCallback(() => {
+    console.log('Next');
     const firstDayOfNextMonth = addMonths(firstDayOfSelectedMonth, 1);
 
     setSelectedMonth(format(firstDayOfNextMonth, 'MMM-yyyy'));
-  };
+  }, [firstDayOfSelectedMonth]);
 
   // go to previous month
-  const gotoPreviousMonth = () => {
+  const gotoPreviousMonth = useCallback(() => {
+    console.log('Previous');
     const firstDayOfPreviousMonth = subMonths(firstDayOfSelectedMonth, 1);
 
     setSelectedMonth(format(firstDayOfPreviousMonth, 'MMM-yyyy'));
-  };
+  }, [firstDayOfSelectedMonth]);
 
   // update selected day
   const updateSelectedDay = (day: Date) => {

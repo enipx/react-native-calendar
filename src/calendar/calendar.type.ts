@@ -1,10 +1,15 @@
 import type { FlexProps } from '../themed';
 
+type CalendarHightlightType = {
+  from: string;
+  to: string;
+};
 export interface CalendarProps {
   date?: string; // format YYYY-MM-DD
   font?: string;
   onSelectedDay?: (day: Date) => void;
   hideOtherMonthDays?: boolean;
+  highlight?: CalendarHightlightType;
 }
 
 export interface WeekCalendarProps extends CalendarProps {}
