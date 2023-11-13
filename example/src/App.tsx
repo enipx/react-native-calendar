@@ -5,7 +5,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <WeekCalendar />
-      <Calendar />
+      <Calendar highlight={{ from: '2023-11-13', to: '2023-11-18' }} />
     </View>
   );
 }

@@ -38,6 +38,8 @@ export interface ViewProps extends DefaultViewProps {
   pt?: ViewStyle['paddingTop'];
   borderRadius?: ViewStyle['borderRadius'];
   opacity?: ViewStyle['opacity'];
+  overflow?: ViewStyle['overflow'];
+  position?: ViewStyle['position'];
 }
 
 export interface FlexProps extends ViewProps {
@@ -78,6 +80,8 @@ export const View = (props: ViewProps) => {
     mt,
     borderRadius,
     opacity,
+    overflow,
+    position,
     ...rest
   } = props;
 
@@ -103,6 +107,8 @@ export const View = (props: ViewProps) => {
           marginTop: mt,
           borderRadius,
           opacity,
+          overflow,
+          position,
         },
         // eslint-disable-next-line react-native/no-inline-styles
         center ? { justifyContent: 'center', alignItems: 'center' } : {},

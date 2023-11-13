@@ -73,6 +73,7 @@ export const Calendar = (props: CalendarProps) => {
     gotoNextMonth,
     gotoPreviousMonth,
     allSelectedMonthDays,
+    isDayHighlighted,
     getDayStyle,
     isDayVisible,
   } = useCalendar(props);
@@ -95,9 +96,11 @@ export const Calendar = (props: CalendarProps) => {
 
         <Flex width="100%" flexWrap="wrap">
           {allSelectedMonthDays.map((day, index) => {
-            let { color, bg } = getDayStyle(day);
+            let { color, bg, viewBg } = getDayStyle(day);
 
             const hide = !isDayVisible(day);
+
+            const { isFirstDay, isLastDay } = isDayHighlighted(day);
 
             return (
               <View
@@ -105,8 +108,35 @@ export const Calendar = (props: CalendarProps) => {
                 key={index}
                 height={size}
                 center
+                bg={viewBg}
                 opacity={hide ? 0 : 1}
+                overflow="hidden"
+                position="relative"
+                style={[
+                  isFirstDay
+                    ? {
+                        borderTopLeftRadius: size,
+                        borderBottomLeftRadius: size,
+                      }
+                    : {},
+                  isLastDay
+                    ? {
+                        borderTopRightRadius: size,
+                        borderBottomRightRadius: size,
+                      }
+                    : {},
+                ]}
               >
+                {(isFirstDay || isLastDay) && isDaySelected(day) ? (
+                  <View
+                    position="absolute"
+                    height="100%"
+                    width="100%"
+                    borderRadius={size}
+                    style={{ left: 0, top: 0 }}
+                    bg="#8A72FB"
+                  />
+                ) : null}
                 <Button
                   borderRadius={size}
                   size={size}

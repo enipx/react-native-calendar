@@ -11,12 +11,13 @@ import {
   isToday,
   isSameDay,
   isSameMonth,
+  isWithinInterval,
 } from 'date-fns';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { CalendarProps } from '../calendar/calendar.type';
 
 export const useCalendar = (options: CalendarProps) => {
-  const { date: optionsDate, hideOtherMonthDays } = options;
+  const { date: optionsDate, hideOtherMonthDays, highlight } = options;
 
   const today = startOfToday();
 
@@ -43,7 +44,6 @@ export const useCalendar = (options: CalendarProps) => {
 
   // go to next month
   const gotoNextMonth = useCallback(() => {
-    console.log('Next');
     const firstDayOfNextMonth = addMonths(firstDayOfSelectedMonth, 1);
 
     setSelectedMonth(format(firstDayOfNextMonth, 'MMM-yyyy'));
@@ -51,7 +51,6 @@ export const useCalendar = (options: CalendarProps) => {
 
   // go to previous month
   const gotoPreviousMonth = useCallback(() => {
-    console.log('Previous');
     const firstDayOfPreviousMonth = subMonths(firstDayOfSelectedMonth, 1);
 
     setSelectedMonth(format(firstDayOfPreviousMonth, 'MMM-yyyy'));
@@ -65,23 +64,33 @@ export const useCalendar = (options: CalendarProps) => {
 
   const getDayStyle = (day: Date) => {
     switch (true) {
-      case isSameDay(day, selectedDay):
+      case isDaySelected(day):
         return {
+          viewBg: isDayHighlighted(day).isBetween ? '#F2F4F7' : 'transparent',
           bg: '#8A72FB',
           color: '#fff',
         };
+      case isDayHighlighted(day).isBetween:
+        return {
+          viewBg: '#F2F4F7',
+          bg: '#F2F4F7',
+          color: isToday(day) ? '#8A72FB' : 'black',
+        };
       case isToday(day):
         return {
+          viewBg: 'transparent',
           bg: 'transparent',
           color: '#8A72FB',
         };
       case !isSameMonth(day, firstDayOfSelectedMonth):
         return {
+          viewBg: 'transparent',
           bg: 'transparent',
           color: 'rgba(0,0,0,0.3)',
         };
       default:
         return {
+          viewBg: 'transparent',
           bg: 'transparent',
           color: 'black',
         };
@@ -101,6 +110,31 @@ export const useCalendar = (options: CalendarProps) => {
     }
 
     return true;
+  };
+
+  const isDayHighlighted = (day: Date) => {
+    // if highlight is not provided, return false
+    if (!highlight) {
+      return {
+        isBetween: false,
+        isFirstDay: false,
+        isLastDay: false,
+      };
+    }
+
+    const { from, to } = highlight;
+
+    const fromDate = parse(from, 'yyyy-MM-dd', new Date());
+    const toDate = parse(to, 'yyyy-MM-dd', new Date());
+
+    return {
+      // checj if day is between from and to date
+      isBetween: isWithinInterval(day, { start: fromDate, end: toDate }),
+      // check if day is same as from date - this is for styling purpose
+      isFirstDay: isSameDay(day, fromDate),
+      // check if day is same as to date - this is for styling purpose
+      isLastDay: isSameDay(day, toDate),
+    };
   };
 
   useEffect(() => {
@@ -137,6 +171,7 @@ export const useCalendar = (options: CalendarProps) => {
     isDayToday,
     isDayInCurrentMonth,
     isDayVisible,
+    isDayHighlighted,
     formated: {
       displayDate: format(firstDayOfSelectedMonth, 'MMMM yyyy'),
       month: format(firstDayOfSelectedMonth, 'MMMM'),
