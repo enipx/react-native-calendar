@@ -1,0 +1,145 @@
+import {
+  startOfToday,
+  format,
+  parse,
+  eachDayOfInterval,
+  startOfWeek,
+  endOfWeek,
+  endOfMonth,
+  addMonths,
+  subMonths,
+  isToday,
+  isSameDay,
+  isSameMonth,
+} from 'date-fns';
+import { useEffect, useState } from 'react';
+import type { CalendarProps } from '../calendar/calendar.type';
+
+export const useCalendar = (options: CalendarProps) => {
+  const { date: optionsDate, hideOtherMonthDays } = options;
+
+  const today = startOfToday();
+
+  const date = optionsDate
+    ? parse(optionsDate, 'yyyy-MM-dd', new Date())
+    : today;
+
+  // current selected day - default is today
+  const [selectedDay, setSelectedDay] = useState(date);
+
+  // selected month - default is current month
+  const [selectedMonth, setSelectedMonth] = useState(format(date, 'MMM-yyyy'));
+
+  // first day of the selected month
+  const firstDayOfSelectedMonth = parse(selectedMonth, 'MMM-yyyy', new Date());
+
+  // all days of the selected month
+  const allSelectedMonthDays = eachDayOfInterval({
+    start: startOfWeek(firstDayOfSelectedMonth),
+    end: endOfWeek(endOfMonth(firstDayOfSelectedMonth)),
+  });
+
+  // go to next month
+  const gotoNextMonth = () => {
+    const firstDayOfNextMonth = addMonths(firstDayOfSelectedMonth, 1);
+
+    setSelectedMonth(format(firstDayOfNextMonth, 'MMM-yyyy'));
+  };
+
+  // go to previous month
+  const gotoPreviousMonth = () => {
+    const firstDayOfPreviousMonth = subMonths(firstDayOfSelectedMonth, 1);
+
+    setSelectedMonth(format(firstDayOfPreviousMonth, 'MMM-yyyy'));
+  };
+
+  // update selected day
+  const updateSelectedDay = (day: Date) => {
+    setSelectedDay(day);
+    options?.onSelectedDay?.(day);
+  };
+
+  const getDayStyle = (day: Date) => {
+    switch (true) {
+      case isSameDay(day, selectedDay):
+        return {
+          bg: '#8A72FB',
+          color: '#fff',
+        };
+      case isToday(day):
+        return {
+          bg: 'transparent',
+          color: '#8A72FB',
+        };
+      case !isSameMonth(day, firstDayOfSelectedMonth):
+        return {
+          bg: 'transparent',
+          color: 'rgba(0,0,0,0.3)',
+        };
+      default:
+        return {
+          bg: 'transparent',
+          color: 'black',
+        };
+    }
+  };
+
+  const isDaySelected = (day: Date) => isSameDay(day, selectedDay);
+
+  const isDayToday = (day: Date) => isToday(day);
+
+  const isDayInCurrentMonth = (day: Date) =>
+    isSameMonth(day, firstDayOfSelectedMonth);
+
+  const isDayVisible = (day: Date) => {
+    if (hideOtherMonthDays) {
+      return isDayInCurrentMonth(day);
+    }
+
+    return true;
+  };
+
+  useEffect(() => {
+    /**
+     * @NOTE if date is not provided, set selected day to today
+     * else set it to the provided date
+     */
+    const newDate = optionsDate
+      ? parse(optionsDate, 'yyyy-MM-dd', new Date())
+      : today;
+
+    // if new date is same as selected day, do nothing
+    if (isSameDay(newDate, selectedDay)) {
+      return;
+    }
+
+    // update selected day to new date
+    setSelectedDay(newDate);
+
+    // update selected month to new date
+    setSelectedMonth(format(newDate, 'MMM-yyyy'));
+  }, [optionsDate]);
+
+  return {
+    today,
+    selectedDay,
+    selectedMonth,
+    allSelectedMonthDays,
+    gotoNextMonth,
+    gotoPreviousMonth,
+    updateSelectedDay,
+    getDayStyle,
+    isDaySelected,
+    isDayToday,
+    isDayInCurrentMonth,
+    isDayVisible,
+    formated: {
+      displayDate: format(firstDayOfSelectedMonth, 'MMMM yyyy'),
+      month: format(firstDayOfSelectedMonth, 'MMMM'),
+      year: format(firstDayOfSelectedMonth, 'yyyy'),
+      day: format(selectedDay, 'dd'),
+      dayOfWeek: format(selectedDay, 'EEEE'),
+      dayOfWeekShort: format(selectedDay, 'EEE'),
+    },
+  };
+};
