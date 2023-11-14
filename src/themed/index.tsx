@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import {
   View as DefaultView,
   type ViewProps as DefaultViewProps,
@@ -9,6 +10,8 @@ import {
   type TouchableOpacityProps,
   FlatList as DefaultFlatList,
   type FlatListProps as DefaultFlatListProps,
+  ScrollView as DefaultScrollView,
+  type ScrollViewProps as DefaultScrollViewProps,
 } from 'react-native';
 
 export interface ButtonProps extends TouchableOpacityProps {
@@ -194,5 +197,27 @@ export const Button = (props: ButtonProps) => {
 export interface FlatListProps<T> extends DefaultFlatListProps<T> {}
 
 export const FlatList = <T extends any>(props: FlatListProps<T>) => {
-  return <DefaultFlatList {...props} />;
+  return (
+    <DefaultFlatList
+      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}
+      {...props}
+    />
+  );
 };
+
+export interface ScrollViewProps extends DefaultScrollViewProps {}
+
+export const ScrollView = forwardRef((props: ScrollViewProps, ref) => {
+  const { style, ...rest } = props;
+
+  return (
+    <DefaultScrollView
+      ref={ref as any}
+      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}
+      style={[style]}
+      {...rest}
+    />
+  );
+});

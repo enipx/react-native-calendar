@@ -6,9 +6,10 @@ import type {
   WeekCalendarProps,
   WeekDaysTextProps,
 } from './calendar.type';
-import { Button, FlatList, Flex, Text, View } from '../themed';
+import { Button, Flex, ScrollView, Text, View } from '../themed';
 import { useCalendar } from '../hooks/use-calender';
 import GestureRecognizer from '../themed/gesture';
+import { useEffect, useRef } from 'react';
 
 export const WeekDaysText = (props: WeekDaysTextProps) => {
   const { font, days, ...rest } = props;
@@ -96,6 +97,7 @@ export const CalendarDay = (props: CalendarDayProps) => {
             }
           : {},
       ]}
+      my={4}
       {...contentStyle}
     >
       {(isHighlightStart || isHighlightEnd) && isSelected ? (
@@ -179,7 +181,6 @@ export const Calendar = (props: CalendarProps) => {
                 isToday={isDayToday(day)}
                 isSelected={isDaySelected(day)}
                 onSelectedDay={updateSelectedDay}
-                contentStyle={{ my: 4 }}
               />
             );
           })}
@@ -190,9 +191,64 @@ export const Calendar = (props: CalendarProps) => {
 };
 
 export const WeekCalendar = (props: WeekCalendarProps) => {
+  const {
+    allSelectedMonthDays,
+    isDayToday,
+    isDaySelected,
+    updateSelectedDay,
+    isDayHighlighted,
+    getDayStyle,
+    isDayVisible,
+    getTodayWeekInMonth,
+  } = useCalendar(props);
+
+  const scrollViewRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (!scrollViewRef.current) return;
+
+    const week = getTodayWeekInMonth();
+
+    if (week === 0) return;
+
+    scrollViewRef.current?.scrollTo({
+      x: getDeviceLayout().width * week,
+      y: 0,
+      animated: true,
+    });
+  }, []);
+
   return (
-    <View>
-      <WeekDaysText days={AllWeekDays.mid} {...props} />
+    <View width="100%">
+      <WeekDaysText mb={12} days={AllWeekDays.mid} {...props} />
+
+      <ScrollView ref={scrollViewRef} horizontal pagingEnabled>
+        <Flex width="100%">
+          {allSelectedMonthDays.map((day, index) => {
+            const styling = getDayStyle(day);
+
+            const hide = !isDayVisible(day);
+
+            const { isFirstDay, isLastDay, isBetween } = isDayHighlighted(day);
+
+            return (
+              <CalendarDay
+                {...props}
+                key={`${day.toTimeString()}-${index}`}
+                day={day}
+                styling={styling}
+                hide={hide}
+                isHighlightEnd={isLastDay}
+                isHighlightStart={isFirstDay}
+                isHighlighted={isBetween}
+                isToday={isDayToday(day)}
+                isSelected={isDaySelected(day)}
+                onSelectedDay={updateSelectedDay}
+              />
+            );
+          })}
+        </Flex>
+      </ScrollView>
     </View>
   );
 };

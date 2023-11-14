@@ -12,6 +12,7 @@ import {
   isSameDay,
   isSameMonth,
   isWithinInterval,
+  daysToWeeks,
 } from 'date-fns';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { CalendarProps, DayStylingType } from '../calendar/calendar.type';
@@ -142,6 +143,8 @@ export const useCalendar = (options: CalendarProps) => {
     };
   };
 
+  const getTodayWeekInMonth = () => daysToWeeks(today.getDate());
+
   useEffect(() => {
     /**
      * @NOTE if date is not provided, set selected day to today
@@ -177,6 +180,7 @@ export const useCalendar = (options: CalendarProps) => {
     isDayInCurrentMonth,
     isDayVisible,
     isDayHighlighted,
+    getTodayWeekInMonth,
     formated: {
       displayDate: format(firstDayOfSelectedMonth, 'MMMM yyyy'),
       month: format(firstDayOfSelectedMonth, 'MMMM'),
