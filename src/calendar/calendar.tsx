@@ -30,20 +30,32 @@ export const WeekDaysText = (props: WeekDaysTextProps) => {
 };
 
 export const CalendarHeader = (props: CalenderHeaderProps) => {
-  const { onNextPress, onPreviousPress, previousElement, nextElement, title } =
-    props;
+  const {
+    onNextPress,
+    onPreviousPress,
+    previousElement,
+    nextElement,
+    title,
+    font,
+  } = props;
 
   const buttonSize = 40;
 
   return (
     <Flex centerY px={16} py={12}>
       <View flex={1}>
-        <Text weight="500">{title}</Text>
+        <Text weight="500" font={font}>
+          {title}
+        </Text>
       </View>
 
       <Flex>
         <Button size={buttonSize} onPress={onPreviousPress}>
-          {previousElement || <Text opacity={0.5}>{'<'}</Text>}
+          {previousElement || (
+            <Text font={font} opacity={0.5}>
+              {'<'}
+            </Text>
+          )}
         </Button>
         <Button
           width={buttonSize / 1.5}
@@ -51,7 +63,11 @@ export const CalendarHeader = (props: CalenderHeaderProps) => {
           onPress={onNextPress}
           style={{ alignItems: 'flex-end' }}
         >
-          {nextElement || <Text opacity={0.5}>{'>'}</Text>}
+          {nextElement || (
+            <Text font={font} opacity={0.5}>
+              {'>'}
+            </Text>
+          )}
         </Button>
       </Flex>
     </Flex>
@@ -66,12 +82,17 @@ export const CalendarDay = (props: CalendarDayProps) => {
     isSelected,
     isHighlightEnd,
     isHighlightStart,
+    isMarked,
+    markColor,
+    markSize = 4,
+    markStyle,
     styling,
     hide,
     onSelectedDay,
     contentStyle,
     textStyle,
     style,
+    font,
   } = props;
 
   return (
@@ -123,10 +144,21 @@ export const CalendarDay = (props: CalendarDayProps) => {
         <Text
           weight={isToday || isSelected ? '500' : undefined}
           color={styling?.color}
+          font={font}
           {...textStyle}
         >
           {day.getDate()}
         </Text>
+        {isMarked && !isSelected ? (
+          <View
+            borderRadius={markSize}
+            position="absolute"
+            style={{ bottom: 4, left: '50%', transform: [{ translateX: -2 }] }}
+            size={markSize}
+            bg={markColor || styling?.activeColor}
+            {...markStyle}
+          />
+        ) : null}
       </Button>
     </View>
   );
@@ -144,6 +176,7 @@ export const Calendar = (props: CalendarProps) => {
     isDayHighlighted,
     getDayStyle,
     isDayVisible,
+    isDayMarked,
   } = useCalendar(props);
 
   return (
@@ -168,6 +201,8 @@ export const Calendar = (props: CalendarProps) => {
 
             const { isFirstDay, isLastDay, isBetween } = isDayHighlighted(day);
 
+            const marked = isDayMarked(day);
+
             return (
               <CalendarDay
                 {...props}
@@ -181,6 +216,7 @@ export const Calendar = (props: CalendarProps) => {
                 isToday={isDayToday(day)}
                 isSelected={isDaySelected(day)}
                 onSelectedDay={updateSelectedDay}
+                isMarked={marked}
               />
             );
           })}
@@ -199,6 +235,7 @@ export const WeekCalendar = (props: WeekCalendarProps) => {
     isDayHighlighted,
     getDayStyle,
     isDayVisible,
+    isDayMarked,
     getTodayWeekInMonth,
   } = useCalendar(props);
 
@@ -231,6 +268,8 @@ export const WeekCalendar = (props: WeekCalendarProps) => {
 
             const { isFirstDay, isLastDay, isBetween } = isDayHighlighted(day);
 
+            const marked = isDayMarked(day);
+
             return (
               <CalendarDay
                 {...props}
@@ -244,6 +283,7 @@ export const WeekCalendar = (props: WeekCalendarProps) => {
                 isToday={isDayToday(day)}
                 isSelected={isDaySelected(day)}
                 onSelectedDay={updateSelectedDay}
+                isMarked={marked}
               />
             );
           })}

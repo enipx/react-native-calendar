@@ -11,6 +11,7 @@ export default function App() {
       <Calendar
         onSelectedDay={(day) => console.log(day)}
         highlight={{ from: '2023-11-13', to: '2023-11-18' }}
+        markedDays={['2023-11-01', '2023-11-18', '2023-11-20']}
       />
     </View>
   );

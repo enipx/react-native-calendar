@@ -10,6 +10,7 @@ export interface CalendarProps {
   onSelectedDay?: (day: Date) => void;
   hideOtherMonthDays?: boolean;
   highlight?: CalendarHightlightType;
+  markedDays?: string[];
 }
 
 export type DayStylingType = {
@@ -28,6 +29,10 @@ export interface CalendarDayProps extends CalendarProps {
   isHighlighted?: boolean;
   isHighlightStart?: boolean;
   isHighlightEnd?: boolean;
+  isMarked?: boolean;
+  markSize?: number;
+  markStyle?: ViewProps;
+  markColor?: string;
   styling?: DayStylingType;
   hide?: boolean;
   contentStyle?: ViewProps;

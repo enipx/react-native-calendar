@@ -186,6 +186,7 @@ export const Button = (props: ButtonProps) => {
           justifyContent: 'center',
           alignItems: 'center',
           borderRadius,
+          position: 'relative',
         },
         style,
       ]}

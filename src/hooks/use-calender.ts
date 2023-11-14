@@ -156,6 +156,14 @@ export const useCalendar = (options: CalendarProps) => {
 
   const getTodayWeekInMonth = () => daysToWeeks(today.getDate());
 
+  const isDayMarked = (day: Date) => {
+    if (!options?.markedDays) {
+      return false;
+    }
+
+    return options?.markedDays?.includes(format(day, 'yyyy-MM-dd'));
+  };
+
   useEffect(() => {
     /**
      * @NOTE if date is not provided, set selected day to today
@@ -191,6 +199,7 @@ export const useCalendar = (options: CalendarProps) => {
     isDayInCurrentMonth,
     isDayVisible,
     isDayHighlighted,
+    isDayMarked,
     getTodayWeekInMonth,
     formated: {
       displayDate: format(firstDayOfSelectedMonth, 'MMMM yyyy'),
