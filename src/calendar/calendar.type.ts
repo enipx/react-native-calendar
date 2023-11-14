@@ -1,4 +1,4 @@
-import type { FlexProps } from '../themed';
+import type { ButtonProps, FlexProps, TextProps, ViewProps } from '../themed';
 
 type CalendarHightlightType = {
   from: string;
@@ -10,6 +10,29 @@ export interface CalendarProps {
   onSelectedDay?: (day: Date) => void;
   hideOtherMonthDays?: boolean;
   highlight?: CalendarHightlightType;
+}
+
+export type DayStylingType = {
+  viewBg: string;
+  bg: string;
+  color: string;
+  activeColor: string;
+};
+
+export interface CalendarDayProps extends CalendarProps {
+  day: Date;
+  size?: number;
+  isToday?: boolean;
+  isSelected?: boolean;
+  isOtherMonthDay?: boolean;
+  isHighlighted?: boolean;
+  isHighlightStart?: boolean;
+  isHighlightEnd?: boolean;
+  styling?: DayStylingType;
+  hide?: boolean;
+  contentStyle?: ViewProps;
+  textStyle?: TextProps;
+  style?: ButtonProps;
 }
 
 export interface WeekCalendarProps extends CalendarProps {}

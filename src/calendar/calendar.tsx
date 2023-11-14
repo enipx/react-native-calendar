@@ -1,11 +1,12 @@
 import { AllWeekDays, getDeviceLayout } from '../helper/base';
 import type {
+  CalendarDayProps,
   CalendarProps,
   CalenderHeaderProps,
   WeekCalendarProps,
   WeekDaysTextProps,
 } from './calendar.type';
-import { Button, Flex, Text, View } from '../themed';
+import { Button, FlatList, Flex, Text, View } from '../themed';
 import { useCalendar } from '../hooks/use-calender';
 import GestureRecognizer from '../themed/gesture';
 
@@ -24,14 +25,6 @@ export const WeekDaysText = (props: WeekDaysTextProps) => {
         );
       })}
     </Flex>
-  );
-};
-
-export const WeekCalendar = (props: WeekCalendarProps) => {
-  return (
-    <View>
-      <WeekDaysText days={AllWeekDays.mid} {...props} />
-    </View>
   );
 };
 
@@ -64,21 +57,92 @@ export const CalendarHeader = (props: CalenderHeaderProps) => {
   );
 };
 
+export const CalendarDay = (props: CalendarDayProps) => {
+  const {
+    day,
+    size = 40,
+    isToday,
+    isSelected,
+    isHighlightEnd,
+    isHighlightStart,
+    styling,
+    hide,
+    onSelectedDay,
+    contentStyle,
+    textStyle,
+    style,
+  } = props;
+
+  return (
+    <View
+      width={getDeviceLayout(AllWeekDays.short.length).width}
+      height={size}
+      center
+      bg={styling?.viewBg}
+      opacity={hide ? 0 : 1}
+      overflow="hidden"
+      position="relative"
+      style={[
+        isHighlightStart
+          ? {
+              borderTopLeftRadius: size,
+              borderBottomLeftRadius: size,
+            }
+          : {},
+        isHighlightEnd
+          ? {
+              borderTopRightRadius: size,
+              borderBottomRightRadius: size,
+            }
+          : {},
+      ]}
+      {...contentStyle}
+    >
+      {(isHighlightStart || isHighlightEnd) && isSelected ? (
+        <View
+          position="absolute"
+          height="100%"
+          width="100%"
+          borderRadius={size}
+          style={{ left: 0, top: 0 }}
+          bg={styling?.activeColor}
+        />
+      ) : null}
+      <Button
+        borderRadius={size}
+        size={size}
+        bg={styling?.bg}
+        onPress={() => {
+          if (hide) return;
+          onSelectedDay?.(day);
+        }}
+        {...style}
+      >
+        <Text
+          weight={isToday || isSelected ? '500' : undefined}
+          color={styling?.color}
+          {...textStyle}
+        >
+          {day.getDate()}
+        </Text>
+      </Button>
+    </View>
+  );
+};
+
 export const Calendar = (props: CalendarProps) => {
   const {
-    isDayToday,
-    isDaySelected,
-    updateSelectedDay,
     formated,
     gotoNextMonth,
     gotoPreviousMonth,
     allSelectedMonthDays,
+    isDayToday,
+    isDaySelected,
+    updateSelectedDay,
     isDayHighlighted,
     getDayStyle,
     isDayVisible,
   } = useCalendar(props);
-
-  const size = 40;
 
   return (
     <View>
@@ -96,70 +160,39 @@ export const Calendar = (props: CalendarProps) => {
 
         <Flex width="100%" flexWrap="wrap">
           {allSelectedMonthDays.map((day, index) => {
-            let { color, bg, viewBg } = getDayStyle(day);
+            const styling = getDayStyle(day);
 
             const hide = !isDayVisible(day);
 
-            const { isFirstDay, isLastDay } = isDayHighlighted(day);
+            const { isFirstDay, isLastDay, isBetween } = isDayHighlighted(day);
 
             return (
-              <View
-                width={getDeviceLayout(AllWeekDays.short.length).width}
-                key={index}
-                height={size}
-                center
-                bg={viewBg}
-                opacity={hide ? 0 : 1}
-                overflow="hidden"
-                position="relative"
-                style={[
-                  isFirstDay
-                    ? {
-                        borderTopLeftRadius: size,
-                        borderBottomLeftRadius: size,
-                      }
-                    : {},
-                  isLastDay
-                    ? {
-                        borderTopRightRadius: size,
-                        borderBottomRightRadius: size,
-                      }
-                    : {},
-                ]}
-              >
-                {(isFirstDay || isLastDay) && isDaySelected(day) ? (
-                  <View
-                    position="absolute"
-                    height="100%"
-                    width="100%"
-                    borderRadius={size}
-                    style={{ left: 0, top: 0 }}
-                    bg="#8A72FB"
-                  />
-                ) : null}
-                <Button
-                  borderRadius={size}
-                  size={size}
-                  bg={bg}
-                  onPress={() => {
-                    if (hide) return;
-                    updateSelectedDay(day);
-                  }}
-                >
-                  <Text
-                    weight={
-                      isDayToday(day) || isDaySelected(day) ? '500' : undefined
-                    }
-                    color={color}
-                  >
-                    {day.getDate()}
-                  </Text>
-                </Button>
-              </View>
+              <CalendarDay
+                {...props}
+                key={`${day.toTimeString()}-${index}`}
+                day={day}
+                styling={styling}
+                hide={hide}
+                isHighlightEnd={isLastDay}
+                isHighlightStart={isFirstDay}
+                isHighlighted={isBetween}
+                isToday={isDayToday(day)}
+                isSelected={isDaySelected(day)}
+                onSelectedDay={updateSelectedDay}
+                contentStyle={{ my: 4 }}
+              />
             );
           })}
         </Flex>
       </GestureRecognizer>
+    </View>
+  );
+};
+
+export const WeekCalendar = (props: WeekCalendarProps) => {
+  return (
+    <View>
+      <WeekDaysText days={AllWeekDays.mid} {...props} />
     </View>
   );
 };

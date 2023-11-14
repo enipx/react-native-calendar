@@ -7,6 +7,8 @@ import {
   Text as DefaultText,
   TouchableOpacity,
   type TouchableOpacityProps,
+  FlatList as DefaultFlatList,
+  type FlatListProps as DefaultFlatListProps,
 } from 'react-native';
 
 export interface ButtonProps extends TouchableOpacityProps {
@@ -187,4 +189,10 @@ export const Button = (props: ButtonProps) => {
       {...rest}
     />
   );
+};
+
+export interface FlatListProps<T> extends DefaultFlatListProps<T> {}
+
+export const FlatList = <T extends any>(props: FlatListProps<T>) => {
+  return <DefaultFlatList {...props} />;
 };

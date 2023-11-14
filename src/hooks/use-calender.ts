@@ -14,7 +14,7 @@ import {
   isWithinInterval,
 } from 'date-fns';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import type { CalendarProps } from '../calendar/calendar.type';
+import type { CalendarProps, DayStylingType } from '../calendar/calendar.type';
 
 export const useCalendar = (options: CalendarProps) => {
   const { date: optionsDate, hideOtherMonthDays, highlight } = options;
@@ -62,37 +62,42 @@ export const useCalendar = (options: CalendarProps) => {
     options?.onSelectedDay?.(day);
   };
 
-  const getDayStyle = (day: Date) => {
+  const getDayStyle: (day: Date) => DayStylingType = (day) => {
     switch (true) {
       case isDaySelected(day):
         return {
           viewBg: isDayHighlighted(day).isBetween ? '#F2F4F7' : 'transparent',
           bg: '#8A72FB',
           color: '#fff',
+          activeColor: '#8A72FB',
         };
       case isDayHighlighted(day).isBetween:
         return {
           viewBg: '#F2F4F7',
           bg: '#F2F4F7',
           color: isToday(day) ? '#8A72FB' : 'black',
+          activeColor: '#8A72FB',
         };
       case isToday(day):
         return {
           viewBg: 'transparent',
           bg: 'transparent',
           color: '#8A72FB',
+          activeColor: '#8A72FB',
         };
       case !isSameMonth(day, firstDayOfSelectedMonth):
         return {
           viewBg: 'transparent',
           bg: 'transparent',
           color: 'rgba(0,0,0,0.3)',
+          activeColor: '#8A72FB',
         };
       default:
         return {
           viewBg: 'transparent',
           bg: 'transparent',
           color: 'black',
+          activeColor: '#8A72FB',
         };
     }
   };
