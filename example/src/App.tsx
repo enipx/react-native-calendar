@@ -4,8 +4,14 @@ import { WeekCalendar, Calendar } from 'react-native-calendar';
 export default function App() {
   return (
     <View style={styles.container}>
-      <WeekCalendar highlight={{ from: '2023-11-14', to: '2023-11-18' }} />
-      <Calendar highlight={{ from: '2023-11-13', to: '2023-11-18' }} />
+      <WeekCalendar
+        onSelectedDay={(day) => console.log(day)}
+        highlight={{ from: '2023-11-14', to: '2023-11-18' }}
+      />
+      <Calendar
+        onSelectedDay={(day) => console.log(day)}
+        highlight={{ from: '2023-11-13', to: '2023-11-18' }}
+      />
     </View>
   );
 }

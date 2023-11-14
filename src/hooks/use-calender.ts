@@ -64,41 +64,52 @@ export const useCalendar = (options: CalendarProps) => {
   };
 
   const getDayStyle: (day: Date) => DayStylingType = (day) => {
+    const styles = {
+      activeColor: '#8A72FB',
+      inactiveColor: 'rgba(0,0,0,0.3)',
+      transparent: 'transparent',
+      fadedColor: '#F2F4F7',
+      white: '#fff',
+      black: '#000',
+    };
+
     switch (true) {
       case isDaySelected(day):
         return {
-          viewBg: isDayHighlighted(day).isBetween ? '#F2F4F7' : 'transparent',
-          bg: '#8A72FB',
-          color: '#fff',
-          activeColor: '#8A72FB',
+          viewBg: isDayHighlighted(day).isBetween
+            ? styles.fadedColor
+            : styles.transparent,
+          bg: styles.activeColor,
+          color: styles.white,
+          activeColor: styles.activeColor,
         };
       case isDayHighlighted(day).isBetween:
         return {
-          viewBg: '#F2F4F7',
-          bg: '#F2F4F7',
-          color: isToday(day) ? '#8A72FB' : 'black',
-          activeColor: '#8A72FB',
+          viewBg: styles.fadedColor,
+          bg: styles.fadedColor,
+          color: isToday(day) ? styles.activeColor : styles.black,
+          activeColor: styles.activeColor,
         };
       case isToday(day):
         return {
-          viewBg: 'transparent',
-          bg: 'transparent',
-          color: '#8A72FB',
-          activeColor: '#8A72FB',
+          viewBg: styles.transparent,
+          bg: styles.transparent,
+          color: styles.activeColor,
+          activeColor: styles.activeColor,
         };
       case !isSameMonth(day, firstDayOfSelectedMonth):
         return {
-          viewBg: 'transparent',
-          bg: 'transparent',
-          color: 'rgba(0,0,0,0.3)',
-          activeColor: '#8A72FB',
+          viewBg: styles.transparent,
+          bg: styles.transparent,
+          color: styles.inactiveColor,
+          activeColor: styles.activeColor,
         };
       default:
         return {
-          viewBg: 'transparent',
-          bg: 'transparent',
-          color: 'black',
-          activeColor: '#8A72FB',
+          viewBg: styles.transparent,
+          bg: styles.transparent,
+          color: styles.black,
+          activeColor: styles.activeColor,
         };
     }
   };
