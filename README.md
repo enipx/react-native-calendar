@@ -20,11 +20,11 @@ Thanks for using.
 Install dependencies:
 
 ```sh
-$ yarn add @enipx/react-native-calendar
+$ yarn add date-fns @enipx/react-native-calendar
 
 # or
 
-$ npm i @enipx/react-native-calendar
+$ npm i date-fns @enipx/react-native-calendar
 ```
 
 ## Usage

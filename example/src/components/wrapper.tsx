@@ -28,7 +28,6 @@ export const Wrapper = (props: WrapperProps) => {
             marginBottom: 16,
             fontSize: 18,
             fontWeight: 'bold',
-            borderRadius: 32,
           }}
         >
           {title}
