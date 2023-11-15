@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import { WeekCalendar, Calendar } from 'react-native-calendar';
+import { WeekCalendar, Calendar } from '@enipx/react-native-calendar';
 import { Wrapper } from './components/wrapper';
 
 export default function App() {
