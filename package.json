@@ -1,5 +1,5 @@
 {
-  "name": "react-native-calendar",
+  "name": "@enipx/react-native-calendar",
   "version": "0.1.0",
   "description": "Easy-to-use React Native calendar for iOS and Android",
   "main": "lib/commonjs/index",
