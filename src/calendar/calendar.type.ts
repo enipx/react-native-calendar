@@ -1,6 +1,6 @@
 import type { ButtonProps, FlexProps, TextProps, ViewProps } from '../themed';
 
-type CalendarHightlightType = {
+type CalendarHighlightType = {
   from: string;
   to: string;
 };
@@ -9,7 +9,7 @@ export interface CalendarProps extends CalendarDayStylingProps {
   font?: string;
   onSelectedDay?: (day: Date) => void;
   hideOtherMonthDays?: boolean;
-  highlight?: CalendarHightlightType;
+  highlight?: CalendarHighlightType;
   markedDays?: string[];
   nextElement?: JSX.Element;
   previousElement?: JSX.Element;

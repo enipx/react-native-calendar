@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import { forwardRef } from 'react';
 import {
   View as DefaultView,
@@ -115,7 +116,6 @@ export const View = (props: ViewProps) => {
           overflow,
           position,
         },
-        // eslint-disable-next-line react-native/no-inline-styles
         center ? { justifyContent: 'center', alignItems: 'center' } : {},
         style,
       ]}
