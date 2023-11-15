@@ -65,6 +65,8 @@ export default function App() {
 | size                       | `number`                 | update day button size                      |
 | borderRadius               | `number`                 | update day border radius                    |
 | textStyle                  | `StyleProp<TextStyle>`   | update text style                           |
+| weekDayTextStyle           | `StyleProps<TextStyle>`  | update weekdays text button style           |
+| weekDayContainerStyle      | `StyleProp<ViewStyle>`   | update week days container style style      |
 | style                      | `StyleProp<ButtonStyle>` | update button style                         |
 | markSize                   | `number`                 | update mark size                            |
 | markColor                  | `number`                 | update mark color                           |

@@ -12,14 +12,25 @@ import GestureRecognizer from '../themed/gesture';
 import { useEffect, useRef } from 'react';
 
 export const WeekDaysText = (props: WeekDaysTextProps) => {
-  const { font, days, textStyle, ...rest } = props;
+  const {
+    font,
+    days,
+    textStyle,
+    weekDayTextStyle,
+    weekDayContainerStyle,
+    width = '100%',
+  } = props;
 
   return (
-    <Flex width="100%" {...rest} size={undefined}>
+    <Flex width={width} style={weekDayContainerStyle}>
       {days.map((day, index) => {
         return (
           <View center flex={1} key={index}>
-            <Text font={font} opacity={0.6} style={textStyle}>
+            <Text
+              font={font}
+              opacity={0.6}
+              style={weekDayTextStyle || textStyle}
+            >
               {day}
             </Text>
           </View>
@@ -40,10 +51,11 @@ export const CalendarHeader = (props: CalenderHeaderProps) => {
     title,
     font,
     size = 40,
+    width = '100%',
   } = props;
 
   return (
-    <Flex centerY px={16} pb={12}>
+    <Flex width={width} centerY px={16} pb={12}>
       <View flex={1}>
         <Text weight="500" font={font}>
           {title}
@@ -102,13 +114,21 @@ export const CalendarDay = (props: CalendarDayProps) => {
     selectedDayStyle,
     todayStyle,
     borderRadius,
+    width,
+    isWeekCalendar,
   } = props;
 
   const radius = borderRadius || borderRadius === 0 ? borderRadius : size;
 
+  const dayWidth = width
+    ? width / AllWeekDays.short.length
+    : isWeekCalendar
+    ? getDeviceLayout(AllWeekDays.short.length).width
+    : `${(100 / AllWeekDays.short.length).toFixed(4)}%`;
+
   return (
     <View
-      width={getDeviceLayout(AllWeekDays.short.length).width}
+      width={dayWidth as any}
       height={size}
       center
       bg={styling?.viewBg}
@@ -308,6 +328,7 @@ export const WeekCalendar = (props: WeekCalendarProps) => {
                 isSelected={isDaySelected(day)}
                 onSelectedDay={updateSelectedDay}
                 isMarked={marked}
+                isWeekCalendar
               />
             );
           })}

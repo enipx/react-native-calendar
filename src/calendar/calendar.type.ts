@@ -15,6 +15,7 @@ export interface CalendarProps extends CalendarDayStylingProps {
   previousElement?: JSX.Element;
   nextElementStyle?: ViewProps['style'];
   previousElementStyle?: ViewProps['style'];
+  width?: number;
 }
 
 export type DayStylingType = {
@@ -29,6 +30,8 @@ export interface CalendarDayStylingProps {
   inActiveColor?: string;
   containerStyle?: ViewProps['style'];
   textStyle?: TextProps['style'];
+  weekDayTextStyle?: TextProps['style'];
+  weekDayContainerStyle?: ViewProps['style'];
   style?: ButtonProps['style'];
   markSize?: number;
   markStyle?: ViewProps['style'];
@@ -58,6 +61,7 @@ export interface CalendarDayProps
   isHighlightEnd?: boolean;
   isMarked?: boolean;
   hide?: boolean;
+  isWeekCalendar?: boolean;
 }
 
 export interface WeekCalendarProps extends CalendarProps {}
