@@ -6,12 +6,14 @@ export default function App() {
     <View style={styles.container}>
       <WeekCalendar
         onSelectedDay={(day) => console.log(day)}
-        highlight={{ from: '2023-11-14', to: '2023-11-18' }}
+        highlight={{ from: '2023-11-15', to: '2023-11-18' }}
       />
       <Calendar
         onSelectedDay={(day) => console.log(day)}
         highlight={{ from: '2023-11-13', to: '2023-11-18' }}
         markedDays={['2023-11-01', '2023-11-18', '2023-11-20']}
+        size={44}
+        borderRadius={0}
       />
     </View>
   );

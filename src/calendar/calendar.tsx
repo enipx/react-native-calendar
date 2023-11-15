@@ -12,14 +12,14 @@ import GestureRecognizer from '../themed/gesture';
 import { useEffect, useRef } from 'react';
 
 export const WeekDaysText = (props: WeekDaysTextProps) => {
-  const { font, days, ...rest } = props;
+  const { font, days, textStyle, size, ...rest } = props;
 
   return (
     <Flex width="100%" {...rest}>
       {days.map((day, index) => {
         return (
           <View center flex={1} key={index}>
-            <Text font={font} opacity={0.6}>
+            <Text font={font} opacity={0.6} style={textStyle}>
               {day}
             </Text>
           </View>
@@ -89,11 +89,16 @@ export const CalendarDay = (props: CalendarDayProps) => {
     styling,
     hide,
     onSelectedDay,
-    contentStyle,
+    containerStyle,
     textStyle,
     style,
     font,
+    selectedDayStyle,
+    todayStyle,
+    borderRadius,
   } = props;
+
+  const radius = borderRadius || borderRadius === 0 ? borderRadius : size;
 
   return (
     <View
@@ -105,47 +110,51 @@ export const CalendarDay = (props: CalendarDayProps) => {
       overflow="hidden"
       position="relative"
       style={[
+        containerStyle,
         isHighlightStart
           ? {
-              borderTopLeftRadius: size,
-              borderBottomLeftRadius: size,
+              borderTopLeftRadius: radius,
+              borderBottomLeftRadius: radius,
             }
           : {},
         isHighlightEnd
           ? {
-              borderTopRightRadius: size,
-              borderBottomRightRadius: size,
+              borderTopRightRadius: radius,
+              borderBottomRightRadius: radius,
             }
           : {},
       ]}
       my={4}
-      {...contentStyle}
     >
       {(isHighlightStart || isHighlightEnd) && isSelected ? (
         <View
           position="absolute"
           height="100%"
           width="100%"
-          borderRadius={size}
+          borderRadius={radius}
           style={{ left: 0, top: 0 }}
           bg={styling?.activeColor}
         />
       ) : null}
       <Button
-        borderRadius={size}
+        borderRadius={radius}
         size={size}
         bg={styling?.bg}
         onPress={() => {
           if (hide) return;
           onSelectedDay?.(day);
         }}
-        {...style}
+        style={[
+          style,
+          isToday ? todayStyle : {},
+          isSelected ? selectedDayStyle : {},
+        ]}
       >
         <Text
           weight={isToday || isSelected ? '500' : undefined}
           color={styling?.color}
           font={font}
-          {...textStyle}
+          style={textStyle}
         >
           {day.getDate()}
         </Text>
@@ -153,10 +162,12 @@ export const CalendarDay = (props: CalendarDayProps) => {
           <View
             borderRadius={markSize}
             position="absolute"
-            style={{ bottom: 4, left: '50%', transform: [{ translateX: -2 }] }}
+            style={[
+              { bottom: 4, left: '50%', transform: [{ translateX: -2 }] },
+              markStyle,
+            ]}
             size={markSize}
             bg={markColor || styling?.activeColor}
-            {...markStyle}
           />
         ) : null}
       </Button>

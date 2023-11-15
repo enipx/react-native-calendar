@@ -4,7 +4,7 @@ type CalendarHightlightType = {
   from: string;
   to: string;
 };
-export interface CalendarProps {
+export interface CalendarProps extends CalendarDayStylingProps {
   date?: string; // format YYYY-MM-DD
   font?: string;
   onSelectedDay?: (day: Date) => void;
@@ -20,9 +20,32 @@ export type DayStylingType = {
   activeColor: string;
 };
 
-export interface CalendarDayProps extends CalendarProps {
-  day: Date;
+export interface CalendarDayStylingProps {
+  activeColor?: string;
+  inActiveColor?: string;
+  containerStyle?: ViewProps['style'];
+  textStyle?: TextProps['style'];
+  style?: ButtonProps['style'];
+  markSize?: number;
+  markStyle?: ViewProps['style'];
+  markColor?: string;
+  styling?: DayStylingType;
+  selectedDayBackgroundColor?: string;
+  selectedDayStyle?: ButtonProps['style'];
+  selectedDayTextColor?: string;
+  highlightBackgroundColor?: string;
+  highlightTextColor?: string;
   size?: number;
+  todayTextColor?: string;
+  todayBackgroundColor?: string;
+  todayStyle?: TextProps['style'];
+  borderRadius?: number;
+}
+
+export interface CalendarDayProps
+  extends CalendarProps,
+    CalendarDayStylingProps {
+  day: Date;
   isToday?: boolean;
   isSelected?: boolean;
   isOtherMonthDay?: boolean;
@@ -30,19 +53,14 @@ export interface CalendarDayProps extends CalendarProps {
   isHighlightStart?: boolean;
   isHighlightEnd?: boolean;
   isMarked?: boolean;
-  markSize?: number;
-  markStyle?: ViewProps;
-  markColor?: string;
-  styling?: DayStylingType;
   hide?: boolean;
-  contentStyle?: ViewProps;
-  textStyle?: TextProps;
-  style?: ButtonProps;
 }
 
 export interface WeekCalendarProps extends CalendarProps {}
 
-export interface WeekDaysTextProps extends CalendarProps, FlexProps {
+export interface WeekDaysTextProps
+  extends CalendarProps,
+    Omit<FlexProps, keyof CalendarDayProps> {
   days: any[];
 }
 

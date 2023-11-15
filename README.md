@@ -10,22 +10,27 @@ npm install react-native-calendar
 
 ## Usage
 
-```js
-import { multiply } from 'react-native-calendar';
+```jsx
+import { Calendar, WeekCalendar } from 'react-native-calendar';
 
 // ...
 
-const result = await multiply(3, 7);
+<Calendar
+  onSelectedDay={(day) => console.log(day)}
+  highlight={{ from: '2023-11-13', to: '2023-11-18' }}
+  markedDays={['2023-11-01', '2023-11-18', '2023-11-20']}
+/>
+
+<WeekCalendar
+  onSelectedDay={(day) => console.log(day)}
+  highlight={{ from: '2023-11-14', to: '2023-11-18' }}
+/>
 ```
 
-## Contributing
+## Props
 
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
+Here is the available props
 
 ## License
 
 MIT
-
----
-
-Made with [create-react-native-library](https://github.com/callstack/react-native-builder-bob)

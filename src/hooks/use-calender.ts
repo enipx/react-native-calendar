@@ -64,14 +64,29 @@ export const useCalendar = (options: CalendarProps) => {
   };
 
   const getDayStyle: (day: Date) => DayStylingType = (day) => {
+    const {
+      selectedDayBackgroundColor,
+      selectedDayTextColor,
+      activeColor,
+      inActiveColor,
+      highlightBackgroundColor,
+      highlightTextColor,
+      todayBackgroundColor,
+      todayTextColor,
+    } = options;
+
     const styles = {
-      activeColor: '#8A72FB',
-      inactiveColor: 'rgba(0,0,0,0.3)',
+      activeColor: activeColor || '#8A72FB',
+      inactiveColor: inActiveColor || 'rgba(0,0,0,0.3)',
       transparent: 'transparent',
-      fadedColor: '#F2F4F7',
+      fadedColor: highlightBackgroundColor || '#F2F4F7',
       white: '#fff',
       black: '#000',
     };
+
+    const todayBg = todayBackgroundColor || styles.transparent;
+
+    const todayColor = todayTextColor || styles.activeColor;
 
     switch (true) {
       case isDaySelected(day):
@@ -79,22 +94,22 @@ export const useCalendar = (options: CalendarProps) => {
           viewBg: isDayHighlighted(day).isBetween
             ? styles.fadedColor
             : styles.transparent,
-          bg: styles.activeColor,
-          color: styles.white,
+          bg: selectedDayBackgroundColor || styles.activeColor,
+          color: selectedDayTextColor || styles.white,
           activeColor: styles.activeColor,
         };
       case isDayHighlighted(day).isBetween:
         return {
           viewBg: styles.fadedColor,
-          bg: styles.fadedColor,
-          color: isToday(day) ? styles.activeColor : styles.black,
+          bg: isToday(day) ? todayBg : styles.fadedColor,
+          color: isToday(day) ? todayColor : highlightTextColor || styles.black,
           activeColor: styles.activeColor,
         };
       case isToday(day):
         return {
           viewBg: styles.transparent,
-          bg: styles.transparent,
-          color: styles.activeColor,
+          bg: todayBg,
+          color: todayColor,
           activeColor: styles.activeColor,
         };
       case !isSameMonth(day, firstDayOfSelectedMonth):
