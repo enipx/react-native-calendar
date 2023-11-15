@@ -278,7 +278,12 @@ export const WeekCalendar = (props: WeekCalendarProps) => {
     <View width="100%">
       <WeekDaysText mb={12} days={AllWeekDays.mid} {...props} />
 
-      <ScrollView ref={scrollViewRef} horizontal pagingEnabled>
+      <ScrollView
+        ref={scrollViewRef}
+        scrollToOverflowEnabled
+        horizontal
+        pagingEnabled
+      >
         <Flex width="100%">
           {allSelectedMonthDays.map((day, index) => {
             const styling = getDayStyle(day);
