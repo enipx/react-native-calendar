@@ -57,6 +57,7 @@ export default function App() {
 | date                       | `string`                 | default date: format is YYYY-MM-DD          |
 | onSelectedDay              | `(date: Date) => void`   | callback method when an date is selected    |
 | font                       | `string`                 | change component font                       |
+| textColor                  | `string`                 | change text color                           |
 | hideOtherMonthDays         | `boolean`                | hide other month days                       |
 | highlight                  | `CalendarHightlightType` | specify range of date to highlight          |
 | markedDays                 | `string[]`               | specify dates to mark                       |

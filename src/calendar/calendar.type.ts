@@ -29,6 +29,7 @@ export interface CalendarDayStylingProps {
   activeColor?: string;
   inActiveColor?: string;
   containerStyle?: ViewProps['style'];
+  textColor?: string;
   textStyle?: TextProps['style'];
   weekDayTextStyle?: TextProps['style'];
   weekDayContainerStyle?: ViewProps['style'];
@@ -43,6 +44,7 @@ export interface CalendarDayStylingProps {
   highlightBackgroundColor?: string;
   highlightTextColor?: string;
   size?: number;
+  todayTextStyle?: TextProps['style'];
   todayTextColor?: string;
   todayBackgroundColor?: string;
   todayStyle?: TextProps['style'];

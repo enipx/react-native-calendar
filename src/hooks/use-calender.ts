@@ -73,6 +73,7 @@ export const useCalendar = (options: CalendarProps) => {
       highlightTextColor,
       todayBackgroundColor,
       todayTextColor,
+      textColor,
     } = options;
 
     const styles = {
@@ -123,7 +124,7 @@ export const useCalendar = (options: CalendarProps) => {
         return {
           viewBg: styles.transparent,
           bg: styles.transparent,
-          color: styles.black,
+          color: textColor || styles.black,
           activeColor: styles.activeColor,
         };
     }

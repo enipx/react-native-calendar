@@ -109,6 +109,7 @@ export const CalendarDay = (props: CalendarDayProps) => {
     onSelectedDay,
     containerStyle,
     textStyle,
+    todayTextStyle,
     style,
     font,
     selectedDayStyle,
@@ -181,7 +182,7 @@ export const CalendarDay = (props: CalendarDayProps) => {
           weight={isToday || isSelected ? '500' : undefined}
           color={styling?.color}
           font={font}
-          style={textStyle}
+          style={[textStyle, isToday ? todayTextStyle : {}]}
         >
           {day.getDate()}
         </Text>
