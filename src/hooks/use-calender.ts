@@ -198,6 +198,7 @@ export const useCalendar = (options: CalendarProps) => {
 
     // update selected month to new date
     setSelectedMonth(format(newDate, 'MMM-yyyy'));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [optionsDate]);
 
   return {
@@ -216,7 +217,7 @@ export const useCalendar = (options: CalendarProps) => {
     isDayHighlighted,
     isDayMarked,
     getTodayWeekInMonth,
-    formated: {
+    formatted: {
       displayDate: format(firstDayOfSelectedMonth, 'MMMM yyyy'),
       month: format(firstDayOfSelectedMonth, 'MMMM'),
       year: format(firstDayOfSelectedMonth, 'yyyy'),

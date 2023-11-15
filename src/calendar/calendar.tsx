@@ -12,10 +12,10 @@ import GestureRecognizer from '../themed/gesture';
 import { useEffect, useRef } from 'react';
 
 export const WeekDaysText = (props: WeekDaysTextProps) => {
-  const { font, days, textStyle, size, ...rest } = props;
+  const { font, days, textStyle, ...rest } = props;
 
   return (
-    <Flex width="100%" {...rest}>
+    <Flex width="100%" {...rest} size={undefined}>
       {days.map((day, index) => {
         return (
           <View center flex={1} key={index}>
@@ -66,6 +66,7 @@ export const CalendarHeader = (props: CalenderHeaderProps) => {
           width={size / 1.5}
           height={size}
           onPress={onNextPress}
+          // eslint-disable-next-line react-native/no-inline-styles
           style={[{ alignItems: 'flex-end' }, nextElementStyle]}
         >
           {nextElement || (
@@ -137,6 +138,7 @@ export const CalendarDay = (props: CalendarDayProps) => {
           height="100%"
           width="100%"
           borderRadius={radius}
+          // eslint-disable-next-line react-native/no-inline-styles
           style={{ left: 0, top: 0 }}
           bg={styling?.activeColor}
         />
@@ -168,6 +170,7 @@ export const CalendarDay = (props: CalendarDayProps) => {
             borderRadius={markSize}
             position="absolute"
             style={[
+              // eslint-disable-next-line react-native/no-inline-styles
               { bottom: 4, left: '50%', transform: [{ translateX: -2 }] },
               markStyle,
             ]}
@@ -182,7 +185,7 @@ export const CalendarDay = (props: CalendarDayProps) => {
 
 export const Calendar = (props: CalendarProps) => {
   const {
-    formated,
+    formatted,
     gotoNextMonth,
     gotoPreviousMonth,
     allSelectedMonthDays,
@@ -198,7 +201,7 @@ export const Calendar = (props: CalendarProps) => {
   return (
     <View>
       <CalendarHeader
-        title={formated.displayDate}
+        title={formatted.displayDate}
         onNextPress={gotoNextMonth}
         onPreviousPress={gotoPreviousMonth}
       />
@@ -269,7 +272,7 @@ export const WeekCalendar = (props: WeekCalendarProps) => {
       y: 0,
       animated: true,
     });
-  }, []);
+  }, [getTodayWeekInMonth]);
 
   return (
     <View width="100%">
