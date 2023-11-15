@@ -35,14 +35,15 @@ export const CalendarHeader = (props: CalenderHeaderProps) => {
     onPreviousPress,
     previousElement,
     nextElement,
+    previousElementStyle,
+    nextElementStyle,
     title,
     font,
+    size = 40,
   } = props;
 
-  const buttonSize = 40;
-
   return (
-    <Flex centerY px={16} py={12}>
+    <Flex centerY px={16} pb={12}>
       <View flex={1}>
         <Text weight="500" font={font}>
           {title}
@@ -50,7 +51,11 @@ export const CalendarHeader = (props: CalenderHeaderProps) => {
       </View>
 
       <Flex>
-        <Button size={buttonSize} onPress={onPreviousPress}>
+        <Button
+          size={size}
+          onPress={onPreviousPress}
+          style={previousElementStyle}
+        >
           {previousElement || (
             <Text font={font} opacity={0.5}>
               {'<'}
@@ -58,10 +63,10 @@ export const CalendarHeader = (props: CalenderHeaderProps) => {
           )}
         </Button>
         <Button
-          width={buttonSize / 1.5}
-          height={buttonSize}
+          width={size / 1.5}
+          height={size}
           onPress={onNextPress}
-          style={{ alignItems: 'flex-end' }}
+          style={[{ alignItems: 'flex-end' }, nextElementStyle]}
         >
           {nextElement || (
             <Text font={font} opacity={0.5}>

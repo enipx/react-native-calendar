@@ -11,6 +11,10 @@ export interface CalendarProps extends CalendarDayStylingProps {
   hideOtherMonthDays?: boolean;
   highlight?: CalendarHightlightType;
   markedDays?: string[];
+  nextElement?: JSX.Element;
+  previousElement?: JSX.Element;
+  nextElementStyle?: ViewProps['style'];
+  previousElementStyle?: ViewProps['style'];
 }
 
 export type DayStylingType = {
@@ -68,6 +72,4 @@ export interface CalenderHeaderProps extends CalendarProps {
   onPreviousPress?: () => void;
   onNextPress?: () => void;
   title: string;
-  nextElement?: JSX.Element;
-  previousElement?: JSX.Element;
 }
