@@ -12,10 +12,10 @@ import {
   isSameDay,
   isSameMonth,
   isWithinInterval,
-  daysToWeeks,
 } from 'date-fns';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { CalendarProps, DayStylingType } from '../calendar/calendar.type';
+import { splitArrayIntoChunks } from '../helper/base';
 
 export const useCalendar = (options: CalendarProps) => {
   const { date: optionsDate, hideOtherMonthDays, highlight } = options;
@@ -161,7 +161,7 @@ export const useCalendar = (options: CalendarProps) => {
     const toDate = parse(to, 'yyyy-MM-dd', new Date());
 
     return {
-      // checj if day is between from and to date
+      // check if day is between from and to date
       isBetween: isWithinInterval(day, { start: fromDate, end: toDate }),
       // check if day is same as from date - this is for styling purpose
       isFirstDay: isSameDay(day, fromDate),
@@ -170,7 +170,22 @@ export const useCalendar = (options: CalendarProps) => {
     };
   };
 
-  const getTodayWeekInMonth = () => daysToWeeks(today.getDate());
+  const getTodayWeekInMonth = (_date?: Date) => {
+    const currentDate = _date || today;
+
+    let res = 0;
+
+    const daysInWeeksArray = splitArrayIntoChunks(allSelectedMonthDays, 7);
+
+    daysInWeeksArray.forEach((week, index) => {
+      if (week.some((day) => isSameDay(day, currentDate))) {
+        res = index;
+        return;
+      }
+    });
+
+    return res;
+  };
 
   const isDayMarked = (day: Date) => {
     if (!options?.markedDays) {

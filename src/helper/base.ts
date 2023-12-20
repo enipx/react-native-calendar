@@ -25,3 +25,11 @@ export const getDeviceLayout = (divisible = 1) => {
     height: height / divisible,
   };
 };
+
+export const splitArrayIntoChunks = (array: any[], chunkSize: number) => {
+  const result = [];
+  for (let i = 0; i < array.length; i += chunkSize) {
+    result.push(array.slice(i, i + chunkSize));
+  }
+  return result;
+};
